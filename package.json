@@ -2,9 +2,12 @@
   "name": "mockup_artboards_01",
   "private": true,
   "scripts": {
-    "dummy": "tsx scripts/dummy.ts"
+    "dummy": "tsx scripts/dummy.ts",
+    "framer:dummy": "tsx scripts/framer-api.ts"
   },
   "devDependencies": {
+    "axios": "^1.12.2",
+    "dotenv": "^17.2.3",
     "tsx": "^4.20.6"
   }
 }
