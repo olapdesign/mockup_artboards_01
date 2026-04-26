@@ -17,6 +17,16 @@ const FIELD_NAMES = [
   "Brief description",
 ];
 
+const getFieldItem = async (collection: any, fieldName: string): Promise<any> => {
+  const fieldItems = await collection.getFields();
+  return fieldItems.find((field) => field.name.toLowerCase() === fieldName.toLowerCase());
+};
+
+const getFieldItems = async (collection: any, fields: any[]): Promise<any[]> => {
+  const fieldItems = await collection.getFields();
+  return fieldItems.filter((field) => fields.includes(field.name.toLowerCase()));
+};
+
 const callFramerApi = async (): Promise<void> => {
   if (!projectUrl) {
     throw new Error("Missing FRAMER_PROJECT_URL in environment.");
@@ -45,6 +55,13 @@ const callFramerApi = async (): Promise<void> => {
       throw new Error('CMS collection "Projects" not found.');
     }
 
+    const fieldItem = await getFieldItem(projectsCollection, FIELD_NAMES[0]);
+    console.log([fieldItem]);
+    const projectTitleFieldItem = fieldItem;
+
+    const fieldItems = await getFieldItems(projectsCollection, FIELD_NAMES);
+    console.log(fieldItems);
+    
     // Get all items
     const allItems = await projectsCollection.getItems();
 
@@ -60,10 +77,12 @@ const callFramerApi = async (): Promise<void> => {
     // Keep selected fields only
     const cleaned = itemsToSave.map((item) => {
       const row: Record<string, any> = {};
+      
+      row[projectTitleFieldItem.name] = item.fieldData[projectTitleFieldItem.id].value ?? null;
 
-      for (const field of FIELD_NAMES) {
-        row[field] = item[field] ?? null;
-      }
+      // for (const field of FIELD_NAMES) {
+      //   row[field] = item[field] ?? null;
+      // }
 
       return row;
     });
@@ -75,7 +94,7 @@ const callFramerApi = async (): Promise<void> => {
       "utf-8"
     );
 
-    console.log(`Saved ${cleaned.length} items to ${OUTPUT_FILE}`);
+    // console.log(`Saved ${cleaned.length} items to ${OUTPUT_FILE}`);
   } finally {
     await framer.disconnect();
   }
