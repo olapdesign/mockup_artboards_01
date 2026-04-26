@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dummy": "tsx scripts/dummy.ts",
-    "framer:dummy": "node --import tsx scripts/framer-api.ts"
+    "framer:dummy": "node --import tsx scripts/framer-api.ts",
+    "bria:remove-bg": "node --import tsx scripts/remove-bg.ts"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
