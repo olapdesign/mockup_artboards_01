@@ -1,6 +1,6 @@
 import "dotenv/config";
 import fs from "fs/promises";
-import { connect } from "framer-api";
+import { connect, ImageAsset } from "framer-api";
 
 const projectUrl = process.env.FRAMER_PROJECT_URL;
 const apiKey = process.env.FRAMER_API_KEY;
@@ -14,6 +14,8 @@ const FIELD_NAMES = [
   "Overview",
   "Details",
   "Brief description",
+  "Preview Image",
+  "Main video URL"
 ];
 
 const getFieldItem = async (collection: any, fieldName: string): Promise<any> => {
@@ -59,7 +61,6 @@ const callFramerApi = async (): Promise<void> => {
       const fieldItem = await getFieldItem(projectsCollection, fieldName);
       fieldItems.push(fieldItem);
     }
-    console.log(fieldItems);
     
     // Get all items
     const allItems = await projectsCollection.getItems();
@@ -78,9 +79,13 @@ const callFramerApi = async (): Promise<void> => {
 
       for (const fieldItem of fieldItems) {
         row[fieldItem.name] = item.fieldData[fieldItem.id].value ?? null;
-        // row.label = fieldItem.name;
-        // row.value = item.fieldData[fieldItem.id].value ?? null;
       }
+
+      const previewImageObj = item.fieldData[fieldItems.find((field) => field.name === "Preview Image")?.id]?.value ?? null;
+      const mainVideoObj = item.fieldData[fieldItems.find((field) => field.name === "Main video URL")?.id]?.value ?? null;
+
+      row["Preview Image"] = (previewImageObj as any)?.url ?? null;
+      row["Main video URL"] = mainVideoObj ?? null;
 
       return row;
     });
