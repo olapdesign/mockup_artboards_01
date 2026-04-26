@@ -9,7 +9,6 @@ const OUTPUT_FILE = "./scripts/out/projects.json";
 
 const FIELD_NAMES = [
   "Project title",
-  "Slug",
   "Client",
   "Year",
   "Overview",
@@ -55,7 +54,11 @@ const callFramerApi = async (): Promise<void> => {
       throw new Error('CMS collection "Projects" not found.');
     }
 
-    const fieldItems = await getFieldItems(projectsCollection, FIELD_NAMES);
+    const fieldItems: any[] = [];
+    for (const fieldName of FIELD_NAMES) {
+      const fieldItem = await getFieldItem(projectsCollection, fieldName);
+      fieldItems.push(fieldItem);
+    }
     console.log(fieldItems);
     
     // Get all items
@@ -75,6 +78,8 @@ const callFramerApi = async (): Promise<void> => {
 
       for (const fieldItem of fieldItems) {
         row[fieldItem.name] = item.fieldData[fieldItem.id].value ?? null;
+        // row.label = fieldItem.name;
+        // row.value = item.fieldData[fieldItem.id].value ?? null;
       }
 
       return row;
