@@ -15,7 +15,8 @@ const FIELD_NAMES = [
   "Details",
   "Brief description",
   "Preview Image",
-  "Main video URL"
+  "Main video URL",
+  "Categories"
 ];
 
 const getFieldItem = async (collection: any, fieldName: string): Promise<any> => {
@@ -61,21 +62,17 @@ const callFramerApi = async (): Promise<void> => {
       const fieldItem = await getFieldItem(projectsCollection, fieldName);
       fieldItems.push(fieldItem);
     }
-    
+
     // Get all items
     const allItems = await projectsCollection.getItems();
 
     console.log(`Total Items: ${allItems.length}`);
 
     let itemsToSave = allItems;
-    
+
     // Published only
     const publishedItems = allItems.filter((item) => item.draft !== true);
     itemsToSave = publishedItems;
-
-    // // First 10 only
-    // const firstTen = allItems.slice(0, 10);
-    // itemsToSave = firstTen;
 
     // Keep selected fields only
     const cleaned = itemsToSave.map((item) => {
@@ -85,12 +82,25 @@ const callFramerApi = async (): Promise<void> => {
         row[fieldItem.name] = item.fieldData[fieldItem.id].value ?? null;
       }
 
-      const previewImageObj = item.fieldData[fieldItems.find((field) => field.name === "Preview Image")?.id]?.value ?? null;
-      const mainVideoObj = item.fieldData[fieldItems.find((field) => field.name === "Main video URL")?.id]?.value ?? null;
+      const previewImageObj =
+        item.fieldData[
+          fieldItems.find((field) => field.name === "Preview Image")?.id
+        ]?.value ?? null;
+
+      const mainVideoObj =
+        item.fieldData[
+          fieldItems.find((field) => field.name === "Main video URL")?.id
+        ]?.value ?? null;
+
+      const categoriesObj =
+        item.fieldData[
+          fieldItems.find((field) => field.name === "Categories")?.id
+        ]?.value ?? null;
 
       row["slug"] = item.slug;
       row["Preview Image"] = (previewImageObj as any)?.url ?? null;
       row["Main video URL"] = mainVideoObj ?? null;
+      row["Categories"] = categoriesObj ?? [];
 
       return row;
     });
@@ -102,7 +112,6 @@ const callFramerApi = async (): Promise<void> => {
       "utf-8"
     );
 
-    // console.log(`Saved ${cleaned.length} items to ${OUTPUT_FILE}`);
   } finally {
     await framer.disconnect();
   }
