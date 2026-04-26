@@ -1,8 +1,21 @@
 import "dotenv/config";
+import fs from "fs/promises";
 import { connect } from "framer-api";
 
 const projectUrl = process.env.FRAMER_PROJECT_URL;
 const apiKey = process.env.FRAMER_API_KEY;
+
+const OUTPUT_FILE = "./out.json";
+
+const FIELD_NAMES = [
+  "Project title",
+  "Slug",
+  "Client",
+  "Year",
+  "Overview",
+  "Details",
+  "Brief description",
+];
 
 const callFramerApi = async (): Promise<void> => {
   if (!projectUrl) {
@@ -19,28 +32,51 @@ const callFramerApi = async (): Promise<void> => {
     const projectInfo = await framer.getProjectInfo();
 
     console.log(`Project: ${projectInfo.name}`);
-    console.log(projectInfo);
 
     // Get all CMS collections
     const collections = await framer.getCollections();
 
-    // Find collection named "Categories"
-    const categoriesCollection = collections.find(
-      (collection) => collection.name === "Categories"
+    // Find "Projects" collection
+    const projectsCollection = collections.find(
+      (collection) => collection.name === "Projects"
     );
 
-    if (!categoriesCollection) {
-      console.log('CMS collection "Categories" not found.');
-      return;
+    if (!projectsCollection) {
+      throw new Error('CMS collection "Projects" not found.');
     }
 
-    // Get all items in the collection
-    const items = await categoriesCollection.getItems();
+    // Get all items
+    const allItems = await projectsCollection.getItems();
 
-    console.log(`Collection: ${categoriesCollection.name}`);
-    console.log(`Total Items: ${items.length}`);
+    console.log(`Total Items: ${allItems.length}`);
+    console.log(allItems[0]);
+
+    let itemsToSave = allItems;
+
+    // First 10 only
+    const firstTen = allItems.slice(0, 10);
+    itemsToSave = firstTen;
+
+    // Keep selected fields only
+    const cleaned = itemsToSave.map((item) => {
+      const row: Record<string, any> = {};
+
+      for (const field of FIELD_NAMES) {
+        row[field] = item[field] ?? null;
+      }
+
+      return row;
+    });
+
+    // Save locally
+    await fs.writeFile(
+      OUTPUT_FILE,
+      JSON.stringify(cleaned, null, 2),
+      "utf-8"
+    );
+
+    console.log(`Saved ${cleaned.length} items to ${OUTPUT_FILE}`);
   } finally {
-    // Close connection cleanly
     await framer.disconnect();
   }
 };
