@@ -68,6 +68,10 @@ const callFramerApi = async (): Promise<void> => {
     console.log(`Total Items: ${allItems.length}`);
 
     let itemsToSave = allItems;
+    
+    // Published only
+    const publishedItems = allItems.filter((item) => item.draft !== true);
+    itemsToSave = publishedItems;
 
     // // First 10 only
     // const firstTen = allItems.slice(0, 10);
@@ -84,6 +88,7 @@ const callFramerApi = async (): Promise<void> => {
       const previewImageObj = item.fieldData[fieldItems.find((field) => field.name === "Preview Image")?.id]?.value ?? null;
       const mainVideoObj = item.fieldData[fieldItems.find((field) => field.name === "Main video URL")?.id]?.value ?? null;
 
+      row["slug"] = item.slug;
       row["Preview Image"] = (previewImageObj as any)?.url ?? null;
       row["Main video URL"] = mainVideoObj ?? null;
 
