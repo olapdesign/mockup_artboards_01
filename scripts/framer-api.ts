@@ -5,7 +5,7 @@ import { connect } from "framer-api";
 const projectUrl = process.env.FRAMER_PROJECT_URL;
 const apiKey = process.env.FRAMER_API_KEY;
 
-const OUTPUT_FILE = "./out.json";
+const OUTPUT_FILE = "./scripts/out/projects.json";
 
 const FIELD_NAMES = [
   "Project title",
@@ -53,9 +53,9 @@ const callFramerApi = async (): Promise<void> => {
 
     let itemsToSave = allItems;
 
-    // First 10 only
-    const firstTen = allItems.slice(0, 10);
-    itemsToSave = firstTen;
+    // // First 10 only
+    // const firstTen = allItems.slice(0, 10);
+    // itemsToSave = firstTen;
 
     // Keep selected fields only
     const cleaned = itemsToSave.map((item) => {
