@@ -6,9 +6,6 @@ const apiKey = process.env.FRAMER_API_KEY;
 
 const callFramerApi = async (): Promise<void> => {
 
-  console.log("projectUrl", projectUrl);
-  console.log("apiKey", apiKey);
-
   if (!projectUrl) {
     throw new Error("Missing FRAMER_PROJECT_URL in environment.");
   }
@@ -22,6 +19,7 @@ const callFramerApi = async (): Promise<void> => {
   try {
     const projectInfo = await framer.getProjectInfo();
     console.log(`Project: ${projectInfo.name}`);
+    console.log(projectInfo);
   } finally {
     // Close down the server API so the script can exit cleanly.
     await framer.disconnect();
