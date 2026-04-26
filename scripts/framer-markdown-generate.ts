@@ -11,6 +11,8 @@ const buildProjectMarkdown = (item: any): string => {
 
   return `## ${item["Project title"]}
 
+![](${item["Preview Image"]})
+
 **Slug:** ${item["slug"]}
 **Client:** ${item["Client"]}
 **Year:** ${item["Year"]}
