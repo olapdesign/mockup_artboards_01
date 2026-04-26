@@ -55,10 +55,6 @@ const callFramerApi = async (): Promise<void> => {
       throw new Error('CMS collection "Projects" not found.');
     }
 
-    const fieldItem = await getFieldItem(projectsCollection, FIELD_NAMES[0]);
-    console.log([fieldItem]);
-    const projectTitleFieldItem = fieldItem;
-
     const fieldItems = await getFieldItems(projectsCollection, FIELD_NAMES);
     console.log(fieldItems);
     
@@ -66,7 +62,6 @@ const callFramerApi = async (): Promise<void> => {
     const allItems = await projectsCollection.getItems();
 
     console.log(`Total Items: ${allItems.length}`);
-    console.log(allItems[0]);
 
     let itemsToSave = allItems;
 
@@ -77,12 +72,10 @@ const callFramerApi = async (): Promise<void> => {
     // Keep selected fields only
     const cleaned = itemsToSave.map((item) => {
       const row: Record<string, any> = {};
-      
-      row[projectTitleFieldItem.name] = item.fieldData[projectTitleFieldItem.id].value ?? null;
 
-      // for (const field of FIELD_NAMES) {
-      //   row[field] = item[field] ?? null;
-      // }
+      for (const fieldItem of fieldItems) {
+        row[fieldItem.name] = item.fieldData[fieldItem.id].value ?? null;
+      }
 
       return row;
     });
