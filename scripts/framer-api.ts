@@ -15,6 +15,7 @@ const FIELD_NAMES = [
   "Details",
   "Brief description",
   "Preview Image",
+  "Gallery",
   "Main video URL",
   "Categories"
 ];
@@ -70,35 +71,39 @@ const callFramerApi = async (): Promise<void> => {
 
     let itemsToSave = allItems;
 
+    const previewImageFieldItem = fieldItems.find((field) => field.name === "Preview Image");
+    const mainVideoFieldItem = fieldItems.find((field) => field.name === "Main video URL");
+    const galleryFieldItem = fieldItems.find((field) => field.name === "Gallery");
+    const categoriesFieldItem = fieldItems.find((field) => field.name === "Categories");
+
     // Published only
     const publishedItems = allItems.filter((item) => item.draft !== true);
     itemsToSave = publishedItems;
+
+    console.log(fieldItems);
+    console.log(galleryFieldItem);
 
     // Keep selected fields only
     const cleaned = itemsToSave.map((item) => {
       const row: Record<string, any> = {};
 
       for (const fieldItem of fieldItems) {
-        row[fieldItem.name] = item.fieldData[fieldItem.id].value ?? null;
+        row[fieldItem.name] = item.fieldData[fieldItem.id]?.value ?? null;
       }
 
-      const previewImageObj =
-        item.fieldData[
-          fieldItems.find((field) => field.name === "Preview Image")?.id
-        ]?.value ?? null;
+      const previewImageObj = item.fieldData[previewImageFieldItem?.id]?.value;
+      const mainVideoObj = item.fieldData[mainVideoFieldItem?.id]?.value;
+      const galleryObj = item.fieldData[galleryFieldItem?.id]?.value;
+      const categoriesObj = item.fieldData[categoriesFieldItem?.id]?.value;
 
-      const mainVideoObj =
-        item.fieldData[
-          fieldItems.find((field) => field.name === "Main video URL")?.id
-        ]?.value ?? null;
-
-      const categoriesObj =
-        item.fieldData[
-          fieldItems.find((field) => field.name === "Categories")?.id
-        ]?.value ?? null;
+      const firstGalleryImage =
+        Array.isArray(galleryObj) && galleryObj.length > 0
+          ? (galleryObj[0] as any)?.url ?? null
+          : (galleryObj as any)?.url ?? null;
 
       row["slug"] = item.slug;
       row["Preview Image"] = (previewImageObj as any)?.url ?? null;
+      row["Gallery"] = firstGalleryImage;
       row["Main video URL"] = mainVideoObj ?? null;
       row["Categories"] = categoriesObj ?? [];
 
