@@ -70,6 +70,7 @@ const callFramerApi = async (): Promise<void> => {
     console.log(`Total Items: ${allItems.length}`);
 
     let itemsToSave = allItems;
+    itemsToSave = itemsToSave.slice(20, 24);
 
     const previewImageFieldItem = fieldItems.find((field) => field.name === "Preview Image");
     const mainVideoFieldItem = fieldItems.find((field) => field.name === "Main video URL");
@@ -80,7 +81,6 @@ const callFramerApi = async (): Promise<void> => {
     const publishedItems = allItems.filter((item) => item.draft !== true);
     itemsToSave = publishedItems;
 
-    console.log(fieldItems);
     console.log(galleryFieldItem);
 
     // Keep selected fields only
@@ -96,14 +96,16 @@ const callFramerApi = async (): Promise<void> => {
       const galleryObj = item.fieldData[galleryFieldItem?.id]?.value;
       const categoriesObj = item.fieldData[categoriesFieldItem?.id]?.value;
 
-      const firstGalleryImage =
-        Array.isArray(galleryObj) && galleryObj.length > 0
-          ? (galleryObj[0] as any)?.url ?? null
-          : (galleryObj as any)?.url ?? null;
+      console.log(galleryObj);
+      console.log(galleryObj?.length);
+
+      const galleryImages = (Array.from(galleryObj as any[]))?.map((image) => (image as any).fieldData.CVQSU7Lsk.value?.thumbnailUrl) ?? [];
+
+      console.log(galleryImages);
 
       row["slug"] = item.slug;
       row["Preview Image"] = (previewImageObj as any)?.url ?? null;
-      row["Gallery"] = firstGalleryImage;
+      // row["Gallery"] = galleryImages;
       row["Main video URL"] = mainVideoObj ?? null;
       row["Categories"] = categoriesObj ?? [];
 
