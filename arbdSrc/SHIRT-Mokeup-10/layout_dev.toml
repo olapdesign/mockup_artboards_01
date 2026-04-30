@@ -8,7 +8,7 @@ background_image = "images/image_base.jpg"
 background_color = "#FFFFFF"
 
 [config_print]
-dpi = 150
+dpi = 100
 
 # ----------------------------
 # Elements
