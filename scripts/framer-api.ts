@@ -1,11 +1,36 @@
 import "dotenv/config";
-import { connect } from "framer-api";
+import fs from "fs/promises";
+import { connect, ImageAsset } from "framer-api";
 
 const projectUrl = process.env.FRAMER_PROJECT_URL;
 const apiKey = process.env.FRAMER_API_KEY;
 
-const callFramerApi = async (): Promise<void> => {
+const OUTPUT_FILE = "./scripts/out/projects.json";
 
+const FIELD_NAMES = [
+  "Project title",
+  "Client",
+  "Year",
+  "Overview",
+  "Details",
+  "Brief description",
+  "Preview Image",
+  "Gallery",
+  "Main video URL",
+  "Categories"
+];
+
+const getFieldItem = async (collection: any, fieldName: string): Promise<any> => {
+  const fieldItems = await collection.getFields();
+  return fieldItems.find((field) => field.name.toLowerCase() === fieldName.toLowerCase());
+};
+
+const getFieldItems = async (collection: any, fields: any[]): Promise<any[]> => {
+  const fieldItems = await collection.getFields();
+  return fieldItems.filter((field) => fields.includes(field.name.toLowerCase()));
+};
+
+const callFramerApi = async (): Promise<void> => {
   if (!projectUrl) {
     throw new Error("Missing FRAMER_PROJECT_URL in environment.");
   }
@@ -18,10 +43,83 @@ const callFramerApi = async (): Promise<void> => {
 
   try {
     const projectInfo = await framer.getProjectInfo();
+
     console.log(`Project: ${projectInfo.name}`);
-    console.log(projectInfo);
+
+    // Get all CMS collections
+    const collections = await framer.getCollections();
+
+    // Find "Projects" collection
+    const projectsCollection = collections.find(
+      (collection) => collection.name === "Projects"
+    );
+
+    if (!projectsCollection) {
+      throw new Error('CMS collection "Projects" not found.');
+    }
+
+    const fieldItems: any[] = [];
+    for (const fieldName of FIELD_NAMES) {
+      const fieldItem = await getFieldItem(projectsCollection, fieldName);
+      fieldItems.push(fieldItem);
+    }
+
+    // Get all items
+    const allItems = await projectsCollection.getItems();
+
+    console.log(`Total Items: ${allItems.length}`);
+
+    let itemsToSave = allItems;
+    itemsToSave = itemsToSave.slice(20, 24);
+
+    const previewImageFieldItem = fieldItems.find((field) => field.name === "Preview Image");
+    const mainVideoFieldItem = fieldItems.find((field) => field.name === "Main video URL");
+    const galleryFieldItem = fieldItems.find((field) => field.name === "Gallery");
+    const categoriesFieldItem = fieldItems.find((field) => field.name === "Categories");
+
+    // Published only
+    const publishedItems = allItems.filter((item) => item.draft !== true);
+    itemsToSave = publishedItems;
+
+    console.log(galleryFieldItem);
+
+    // Keep selected fields only
+    const cleaned = itemsToSave.map((item) => {
+      const row: Record<string, any> = {};
+
+      for (const fieldItem of fieldItems) {
+        row[fieldItem.name] = item.fieldData[fieldItem.id]?.value ?? null;
+      }
+
+      const previewImageObj = item.fieldData[previewImageFieldItem?.id]?.value;
+      const mainVideoObj = item.fieldData[mainVideoFieldItem?.id]?.value;
+      const galleryObj = item.fieldData[galleryFieldItem?.id]?.value;
+      const categoriesObj = item.fieldData[categoriesFieldItem?.id]?.value;
+
+      console.log(galleryObj);
+      console.log(galleryObj?.length);
+
+      const galleryImages = (Array.from(galleryObj as any[]))?.map((image) => (image as any).fieldData.CVQSU7Lsk.value?.thumbnailUrl) ?? [];
+
+      console.log(galleryImages);
+
+      row["slug"] = item.slug;
+      row["Preview Image"] = (previewImageObj as any)?.url ?? null;
+      // row["Gallery"] = galleryImages;
+      row["Main video URL"] = mainVideoObj ?? null;
+      row["Categories"] = categoriesObj ?? [];
+
+      return row;
+    });
+
+    // Save locally
+    await fs.writeFile(
+      OUTPUT_FILE,
+      JSON.stringify(cleaned, null, 2),
+      "utf-8"
+    );
+
   } finally {
-    // Close down the server API so the script can exit cleanly.
     await framer.disconnect();
   }
 };
