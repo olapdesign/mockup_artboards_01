@@ -1,0 +1,209 @@
+# ----------------------------
+# Canvas
+# ----------------------------
+[canvas]
+width = "background_image_width"
+height = "background_image_height"
+background_image = "images/image_base.jpg"
+background_color = "#FFFFFF"
+
+[config_print]
+dpi = 100
+
+# ----------------------------
+# Elements
+# ----------------------------
+
+[[element]]
+id = 1
+type = "draping_preview_mask"
+mask = "images/image_mask_00.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 400
+content_artwork_offset_y = 200
+content_artwork_scale = 0.3
+content_artwork_rotation = 0
+content_artwork_opacity = 0.8
+content_levels_amplifier = 10
+z-index = 100
+
+[[element]]
+id = 2
+type = "draping_preview_mask"
+mask = "images/image_mask_01.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 0
+content_artwork_offset_y = 0
+content_artwork_scale = 1
+content_artwork_rotation = 0
+content_artwork_opacity = 1
+content_levels_amplifier = 16
+z-index = 100
+
+[[element]]
+id = 3
+type = "draping_preview_mask"
+mask = "images/image_mask_02.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 0
+content_artwork_offset_y = 0
+content_artwork_scale = 1
+content_artwork_rotation = 40
+content_artwork_opacity = 1
+content_levels_amplifier = 21
+z-index = 100
+
+[[element]]
+id = 4
+type = "draping_preview_mask"
+mask = "images/image_mask_03.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 0
+content_artwork_offset_y = 0
+content_artwork_scale = 1
+content_artwork_rotation = 70
+content_artwork_opacity = 1
+content_levels_amplifier = 18
+z-index = 100
+
+[[element]]
+id = 5
+type = "draping_preview_mask"
+mask = "images/image_mask_04.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 0
+content_artwork_offset_y = 0
+content_artwork_scale = 1
+content_artwork_rotation = 50
+content_artwork_opacity = 1
+content_levels_amplifier = 3
+z-index = 100
+
+[[element]]
+id = 6
+type = "draping_preview_mask"
+mask = "images/image_mask_05.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 40
+content_artwork_offset_y = 0
+content_artwork_scale = 1
+content_artwork_rotation = 0
+content_artwork_opacity = 1
+content_levels_amplifier = 16
+z-index = 100
+
+[[element]]
+id = 7
+type = "draping_preview_mask"
+mask = "images/image_mask_06.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 100
+content_artwork_offset_y = -30
+content_artwork_scale = 1
+content_artwork_rotation = 0
+content_artwork_opacity = 1
+content_levels_amplifier = 16
+z-index = 100
+
+[[element]]
+id = 8
+type = "draping_preview_mask"
+mask = "images/image_mask_07.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 100
+content_artwork_offset_y = -50
+content_artwork_scale = 1
+content_artwork_rotation = 0
+content_artwork_opacity = 1
+content_levels_amplifier = 16
+z-index = 100
+
+[[element]]
+id = 9
+type = "draping_preview_mask"
+mask = "images/image_mask_08.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 100
+content_artwork_offset_y = 0
+content_artwork_scale = 1
+content_artwork_rotation = -25
+content_artwork_opacity = 1
+content_levels_amplifier = 16
+z-index = 100
+
+[[element]]
+id = 10
+type = "draping_preview_mask"
+mask = "images/image_mask_09.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 100
+content_artwork_offset_y = 0
+content_artwork_scale = 1
+content_artwork_rotation = -45
+content_artwork_opacity = 1
+content_levels_amplifier = 16
+z-index = 100
+
+[[element]]
+id = 11
+type = "draping_preview_mask"
+mask = "images/image_mask_10.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 100
+content_artwork_offset_y = 0
+content_artwork_scale = 1
+content_artwork_rotation = -60
+content_artwork_opacity = 1
+content_levels_amplifier = 16
+z-index = 100
+
+[[element]]
+id = 12
+type = "draping_preview_mask"
+mask = "images/image_mask_11.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 100
+content_artwork_offset_y = 0
+content_artwork_scale = 1
+content_artwork_rotation = -30
+content_artwork_opacity = 1
+content_levels_amplifier = -3
+z-index = 100
+
+[[element]]
+id = 13
+type = "draping_preview_mask"
+mask = "images/image_mask_12.png"
+suitable_content = "preview_artwork_draping"
+content_blend_mode = "multiply"
+content_artwork_offset_x = 120
+content_artwork_offset_y = -20
+content_artwork_scale = 1
+content_artwork_rotation = 0
+content_artwork_opacity = 1
+content_levels_amplifier = -5
+z-index = 100
+
+[[element]]
+id = 14
+type = "draping_preview_base"
+source_image = "images/image_mask_13.png"
+z-index = 110
+
+[[element]]
+id = 15
+type = "draping_preview_base"
+source_image = "images/image_base.jpg"
+z-index = 10
