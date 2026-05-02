@@ -6,6 +6,7 @@
     "dummy": "tsx scripts/dummy.ts",
     "framer:dummy": "node --import tsx scripts/framer-api.ts",
     "framer:markdown": "node --import tsx scripts/framer-markdown-generate.ts",
+    "framer:markdown:photography": "node --import tsx scripts/framer-markdown-generate-photography.ts",
     "bria:remove-bg": "node --import tsx scripts/remove-bg.ts"
   },
   "devDependencies": {

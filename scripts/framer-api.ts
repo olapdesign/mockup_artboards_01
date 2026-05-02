@@ -6,6 +6,7 @@ const projectUrl = process.env.FRAMER_PROJECT_URL;
 const apiKey = process.env.FRAMER_API_KEY;
 
 const OUTPUT_FILE = "./scripts/out/projects.json";
+// const OUTPUT_FILE = "./scripts/out/photography_projects.json";
 
 const FIELD_NAMES = [
   "Project title",
